@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "aaa",
+    "aba",
+    "aaa"
+  ],
+  "key": {
+    "a": {
+      "item": "minecraft:white_dye"
+    },
+    "b": {
+      "item": "minecraft:stone"
+    }
+  },
+  "result": {
+    "item": "builders_dimension:dimension_block",
+    "count": 1
+  }
+}
