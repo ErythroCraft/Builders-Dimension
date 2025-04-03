@@ -27,8 +27,10 @@ I recommend creating the portal or using the Star Gate mod.
 
 **Portal Build:**
 
-- crafting dimension blocks ![dimension_block_craftingtable](https://github.com/user-attachments/assets/862ef153-f58a-4ae5-a322-f03762000f52)
+**----> crafting dimension blocks**
+    ![dimension_block_craftingtable](https://github.com/user-attachments/assets/862ef153-f58a-4ae5-a322-f03762000f52)
 
-----> crafting gate blocks ![gate_block_craftingtable](https://github.com/user-attachments/assets/7a3cb5a8-19ad-4937-951e-55ca0681b8c5)
+**----> crafting gate blocks** 
+    ![gate_block_craftingtable](https://github.com/user-attachments/assets/7a3cb5a8-19ad-4937-951e-55ca0681b8c5)
 
-----> build portal frame with gate blocks like nether portal frame.
+**----> build portal frame with gate blocks like nether portal frame.**
