@@ -8,7 +8,6 @@ import net.neoforged.neoforge.network.handling.IPayloadHandler;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.fml.util.thread.SidedThreadGroups;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.bus.api.IEventBus;
@@ -20,10 +19,7 @@ import net.minecraft.network.FriendlyByteBuf;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.Map;
-import java.util.List;
 import java.util.HashMap;
-import java.util.Collection;
-import java.util.ArrayList;
 
 import de.erythrocraft.buildersdimension.init.BuildersDimensionModTabs;
 import de.erythrocraft.buildersdimension.init.BuildersDimensionModItems;
@@ -34,59 +30,81 @@ public class BuildersDimensionMod {
 	public static final Logger LOGGER = LogManager.getLogger(BuildersDimensionMod.class);
 	public static final String MODID = "builders_dimension";
 
-	public BuildersDimensionMod(IEventBus modEventBus) {
-		// Start of user code block mod constructor
-		// End of user code block mod constructor
-		NeoForge.EVENT_BUS.register(this);
-		modEventBus.addListener(this::registerNetworking);
-
-		BuildersDimensionModBlocks.REGISTRY.register(modEventBus);
-
-		BuildersDimensionModItems.REGISTRY.register(modEventBus);
-
-		BuildersDimensionModTabs.REGISTRY.register(modEventBus);
-
-		// Start of user code block mod init
-		// End of user code block mod init
-	}
-
-	// Start of user code block mod methods
-	// End of user code block mod methods
 	private static boolean networkingRegistered = false;
 	private static final Map<CustomPacketPayload.Type<?>, NetworkMessage<?>> MESSAGES = new HashMap<>();
+	private static final ConcurrentLinkedQueue<Tuple<Runnable, Integer>> workQueue = new ConcurrentLinkedQueue<>();
 
-	private record NetworkMessage<T extends CustomPacketPayload>(StreamCodec<? extends FriendlyByteBuf, T> reader, IPayloadHandler<T> handler) {
+	public BuildersDimensionMod(IEventBus modEventBus) {
+		NeoForge.EVENT_BUS.register(this);
+		modEventBus.addListener(this::registerNetworking);
+		BuildersDimensionModBlocks.REGISTRY.register(modEventBus);
+		BuildersDimensionModItems.REGISTRY.register(modEventBus);
+		BuildersDimensionModTabs.REGISTRY.register(modEventBus);
 	}
 
-	public static <T extends CustomPacketPayload> void addNetworkMessage(CustomPacketPayload.Type<T> id, StreamCodec<? extends FriendlyByteBuf, T> reader, IPayloadHandler<T> handler) {
-		if (networkingRegistered)
-			throw new IllegalStateException("Cannot register new network messages after networking has been registered");
+	// Nutze RegistryFriendlyByteBuf als Basis für Play-Netzwerkpakete
+	private record NetworkMessage<T extends CustomPacketPayload>(
+			StreamCodec<? super net.minecraft.network.RegistryFriendlyByteBuf, T> reader,
+			IPayloadHandler<T> handler) {
+	}
+
+	public static <T extends CustomPacketPayload> void addNetworkMessage(
+			CustomPacketPayload.Type<T> id,
+			StreamCodec<? super net.minecraft.network.RegistryFriendlyByteBuf, T> reader,
+			IPayloadHandler<T> handler) {
+		if (networkingRegistered) {
+			throw new IllegalStateException(
+					"Cannot register new network messages after networking has been registered");
+		}
 		MESSAGES.put(id, new NetworkMessage<>(reader, handler));
 	}
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
 	private void registerNetworking(final RegisterPayloadHandlersEvent event) {
 		final PayloadRegistrar registrar = event.registrar(MODID);
-		MESSAGES.forEach((id, networkMessage) -> registrar.playBidirectional(id, ((NetworkMessage) networkMessage).reader(), ((NetworkMessage) networkMessage).handler()));
+		MESSAGES.forEach((id, message) -> registerMessageHelper(registrar, id, message));
 		networkingRegistered = true;
 	}
 
-	private static final Collection<Tuple<Runnable, Integer>> workQueue = new ConcurrentLinkedQueue<>();
+	// Jetzt passen die Typen perfekt zusammen:
+	@SuppressWarnings("unchecked")
+	private <T extends CustomPacketPayload> void registerMessageHelper(
+			PayloadRegistrar registrar,
+			CustomPacketPayload.Type<?> id,
+			NetworkMessage<?> message) {
+		CustomPacketPayload.Type<T> castedId = (CustomPacketPayload.Type<T>) id;
+		NetworkMessage<T> castedMessage = (NetworkMessage<T>) message;
+		registrar.playBidirectional(castedId, castedMessage.reader(), castedMessage.handler());
+	}
 
+	/**
+	 * Reiht eine Aufgabe ein, die nach einer bestimmten Anzahl an Ticks auf dem
+	 * Server ausgeführt wird.
+	 */
 	public static void queueServerWork(int tick, Runnable action) {
-		if (Thread.currentThread().getThreadGroup() == SidedThreadGroups.SERVER)
-			workQueue.add(new Tuple<>(action, tick));
+		// Fügt die Arbeit sicher zur Queue hinzu; die Validierung des Threads erfolgt
+		// im Tick-Event selbst
+		workQueue.add(new Tuple<>(action, tick));
 	}
 
 	@SubscribeEvent
 	public void tick(ServerTickEvent.Post event) {
-		List<Tuple<Runnable, Integer>> actions = new ArrayList<>();
-		workQueue.forEach(work -> {
-			work.setB(work.getB() - 1);
-			if (work.getB() == 0)
-				actions.add(work);
-		});
-		actions.forEach(e -> e.getA().run());
-		workQueue.removeAll(actions);
+		// Sicheres Abarbeiten der Queue ohne ConcurrentModificationException
+		int size = workQueue.size();
+		for (int i = 0; i < size; i++) {
+			Tuple<Runnable, Integer> work = workQueue.poll();
+			if (work == null)
+				break;
+
+			// Dekrementieren und Prüfen
+			int remainingTicks = work.getB() - 1;
+			if (remainingTicks <= 0) {
+				// Ausführen auf dem Hauptthread des Servers
+				event.getServer().execute(work.getA());
+			} else {
+				// Wenn noch Ticks übrig sind, wieder hinten anreihen
+				work.setB(remainingTicks);
+				workQueue.add(work);
+			}
+		}
 	}
 }

@@ -6,7 +6,7 @@
       "type": "minecraft:multi_noise",
       "biomes": [
         {
-          "biome": "builders_dimension:builders_biom",
+          "biome": "builders_dimension:builders_biome",
           "parameters": {
             "temperature": 0,
             "humidity": 0,
@@ -164,7 +164,7 @@
             "if_true": {
               "type": "minecraft:biome",
               "biome_is": [
-                "builders_dimension:builders_biom"
+                "builders_dimension:builders_biome"
               ]
             },
             "then_run": {
