@@ -1,6 +1,0 @@
-{
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "builders_dimension:item/portal_activator"
-  }
-}
