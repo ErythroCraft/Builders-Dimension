@@ -1,16 +1,15 @@
 package de.erythrocraft.buildersdimension.item;
 
-import net.minecraft.world.level.Level;
-import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.item.Rarity;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.core.BlockPos;
-
 import de.erythrocraft.buildersdimension.block.BuildersDimensionPortalBlock;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
 
 public class BuildersDimensionItem extends Item {
 	public BuildersDimensionItem() {
