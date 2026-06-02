@@ -1,0 +1,29 @@
+modLoader="javafml"
+loaderVersion="[47,)"
+license="Creative Commons Attribution-NonCommercial 3.0"
+
+[[mods]]
+modId="builders_dimension"
+version="1.0.0"
+displayName="Builders Dimension"
+updateJSONURL="https://github.com/ErythroCraft"
+displayURL="https://github.com/ErythroCraft"
+credits="Free to use in moded packs."
+authors="Hinterix, ErythroCraft"
+description="Builders Dimension is a flat dimension for builders. Pixel-art-like and an part of \"Over the Mountain 2.0.\""
+
+# Start of user code block mod configuration
+# End of user code block mod configuration
+
+[[dependencies.builders_dimension]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.20.1]"
+    ordering="AFTER"
+    side="BOTH"
+
+
+
+
+# Start of user code block dependencies configuration
+# End of user code block dependencies configuration

@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "builders_dimension:gate_block",
+    "builders_dimension:dimension_block"
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "request": "launch",
+      "name": "Client",
+      "presentation": {
+        "group": "Mod Development - Builders-Dimension",
+        "order": 0
+      },
+      "projectName": "Builders-Dimension",
+      "mainClass": "net.neoforged.devlaunch.Main",
+      "args": [
+        "@C:\\Users\\moton\\MCreatorWorkspaces\\builders_dimension\\New Coded\\Builders-Dimension\\build\\moddev\\clientRunProgramArgs.txt"
+      ],
+      "vmArgs": [
+        "@C:\\Users\\moton\\MCreatorWorkspaces\\builders_dimension\\New Coded\\Builders-Dimension\\build\\moddev\\clientRunVmArgs.txt",
+        "-Dfml.modFolders\u003dmcreator%%C:\\Users\\moton\\MCreatorWorkspaces\\builders_dimension\\New Coded\\Builders-Dimension\\bin\\main"
+      ],
+      "cwd": "${workspaceFolder}\\run",
+      "env": {},
+      "console": "internalConsole",
+      "shortenCommandLine": "none"
+    },
+    {
+      "type": "java",
+      "request": "launch",
+      "name": "Server",
+      "presentation": {
+        "group": "Mod Development - Builders-Dimension",
+        "order": 1
+      },
+      "projectName": "Builders-Dimension",
+      "mainClass": "net.neoforged.devlaunch.Main",
+      "args": [
+        "@C:\\Users\\moton\\MCreatorWorkspaces\\builders_dimension\\New Coded\\Builders-Dimension\\build\\moddev\\serverRunProgramArgs.txt"
+      ],
+      "vmArgs": [
+        "@C:\\Users\\moton\\MCreatorWorkspaces\\builders_dimension\\New Coded\\Builders-Dimension\\build\\moddev\\serverRunVmArgs.txt",
+        "-Dfml.modFolders\u003dmcreator%%C:\\Users\\moton\\MCreatorWorkspaces\\builders_dimension\\New Coded\\Builders-Dimension\\bin\\main"
+      ],
+      "cwd": "${workspaceFolder}\\run",
+      "env": {},
+      "console": "internalConsole",
+      "shortenCommandLine": "none"
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "block.builders_dimension.builders_portal_block": "Builders Portal Block",
+  "block.builders_dimension.gate_block": "Gate Block",
+  "item_group.builders_dimension.builders_tab": "Builders Dimension",
+  "item.builders_dimension.builders_dimension": "Builders Dimension Portal Igniter",
+  "block.builders_dimension.dimension_block": "Dimension Block",
+  "biome.builders_dimension.builders_biom": "Builders Biom"
+}

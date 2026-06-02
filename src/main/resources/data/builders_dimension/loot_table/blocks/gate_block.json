@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:block",
+  "random_sequence": "builders_dimension:blocks/gate_block",
+  "pools": [
+    {
+      "rolls": 1.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "builders_dimension:gate_block"
+        }
+      ]
+    }
+  ]
+}

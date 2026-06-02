@@ -1,4 +1,3 @@
-
 package de.erythrocraft.buildersdimension.block;
 
 import net.minecraft.world.phys.shapes.VoxelShape;

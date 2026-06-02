@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "builders_dimension:block/gate_block"
+    }
+  }
+}

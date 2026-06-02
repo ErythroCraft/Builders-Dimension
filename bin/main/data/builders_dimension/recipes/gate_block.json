@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "aaa",
+    "aba",
+    "aaa"
+  ],
+  "key": {
+    "a": {
+      "item": "minecraft:stick"
+    },
+    "b": {
+      "item": "builders_dimension:dimension_block"
+    }
+  },
+  "result": {
+    "item": "builders_dimension:gate_block",
+    "count": 1
+  }
+}
